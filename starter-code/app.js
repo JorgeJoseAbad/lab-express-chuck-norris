@@ -1,9 +1,15 @@
+/*jshint esversion: 6*/
 const express = require('express');
 const app = express();
 const Chuck  = require('chucknorris-io');
+const bodyParser = require('body-parser');
+const morgan     = require('morgan');
 const client = new Chuck();
 
 app.use(express.static('public'));
+app.use(
+  morgan(`Request Method: :method, Request URL: :url, Response Time: :response-time(ms)`));
+app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(express.static('search'));
 //app.use(express.static('random'));
 //app.use(express.static('categories'));
@@ -15,9 +21,9 @@ app.set('views', __dirname + "/views");
 app.set('view engine', 'ejs');
 
 app.get('/', function (request, response, next) {
-  console.log(request);
+  //console.log(request);
   response.send('<p>Welcome Ironhacker by george. :)</p>');
-  next();
+  //next(); innecesario
 });
 
 app.get('/index',function(request,response){
@@ -25,23 +31,39 @@ app.get('/index',function(request,response){
   });
 
 app.get('/random',function(request,response){
-  client.getRandomJoke().then(function (joke) {
-   response.send(joke.value);
- })
-   .catch(function (err) {
-       // handle error
-   });
+  client.getRandomJoke()
+    .then(function (joke) {
+     //response.send(joke.value); //send, direct mode
+     response.render(`random.ejs`,{randomJoke:joke.value}); //rendering ejs
+   })
+     .catch(function (err) {
+         // handle error
+         response.send(`error`);
+     });
 });
 
 
   app.get('/categories', function(request,response) {
-    client.getJokeCategories().then(function (rest) {
-    response.render('categories',{
-      rest:rest
-    });
-}).catch(function (err) {
-    // handle error
-});
+    client.getJokeCategories()
+      .then(function (rest) {
+        response.render('categories',{categories:rest});
+      }).catch(function (err) {
+            response.send(`error`);// handle error
+      });
+
+  });
+
+
+  app.get('/categories/:catName',function(req,res){
+    const catChosen = req.params.catName;
+    client.getRandomJoke(catChosen)
+      .then(function (joke) {
+        res
+          
+          .render(`joke-by-category.ejs`,{category:catChosen,joke:joke.value});
+      }).catch(function (err) {
+        // handle error
+      });
 
   });
 

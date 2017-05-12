@@ -1,7 +1,15 @@
-<body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>The Chuck Norris Joke Department</title>
+    <link rel="stylesheet"  href="css/style.css">
 
- <h1>Categories</h1>
+  </head>
+  <body>
 
- <%rest.forEach(function(cat){%><p><a href="categories/<%=cat%>"><%=cat%></a></p><%})%>
+    <h1>Categories</h1>
 
-</body>
+    <%categories.forEach(function(cat){%><p><a href="categories/<%=cat%>"><%=cat%></a></p><%})%>
+
+  </body>
+</html>
