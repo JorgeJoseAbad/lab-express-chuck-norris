@@ -27,14 +27,14 @@ app.get('/', function (request, response, next) {
 });
 
 app.get('/index',function(request,response){
-  response.render(`index.ejs`);
+  response.render('index.ejs');
   });
 
 app.get('/random',function(request,response){
   client.getRandomJoke()
     .then(function (joke) {
      //response.send(joke.value); //send, direct mode
-     response.render(`random.ejs`,{randomJoke:joke.value}); //rendering ejs
+     response.render('random.ejs',{randomJoke:joke.value}); //rendering ejs
    })
      .catch(function (err) {
          // handle error
@@ -59,12 +59,27 @@ app.get('/random',function(request,response){
     client.getRandomJoke(catChosen)
       .then(function (joke) {
         res
-          
-          .render(`joke-by-category.ejs`,{category:catChosen,joke:joke.value});
+
+          .render('joke-by-category',{category:catChosen,joke:joke.value});
       }).catch(function (err) {
         // handle error
       });
 
+  });
+
+  app.get('/search',function(req,res){
+    res.render('search-form');
+  });
+
+  app.post('/search',function(req,res){
+    //res.send('hola');
+    const searchTerm=req.body.keyboard;
+    client.search(searchTerm).then(function (response) {
+        let rsearch=response.items;
+        res.render('search-show',{term:searchTerm,items:rsearch});
+    }).catch(function (err) {
+        // handle error
+    });
   });
 
 // Retrieve a random chuck joke
