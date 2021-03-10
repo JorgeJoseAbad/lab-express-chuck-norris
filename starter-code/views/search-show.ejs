@@ -9,7 +9,11 @@
     <p><%=term%></p>
     <p>Here are all the jokes with <%=term%> in it.</p>
     <% items.forEach(function (item){ %>
-      <p><%=item.value%></p>
+      <div class="joke">
+        <p><%=item.value%></p>
+      </div>
     <% });%>
+    <hr>
+    <a href="/search">volver a buscar</a>
   </body>
 </html>

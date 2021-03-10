@@ -14,15 +14,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(express.static('random'));
 //app.use(express.static('categories'));
 
-//app.set('views','views');
-//app.set('view engine','ejs');
 
 app.set('views', __dirname + "/views");
 app.set('view engine', 'ejs');
 
 app.get('/', function (request, response, next) {
-  //console.log(request);
-  response.send('<p>Welcome Ironhacker by george. :)</p>');
+
+  response.send('<h1>wellcome page from localhost root</h1>'+
+                '<p>Wellcome Ironhacker by george. :)</p>'+
+                '<b>From this link we go to index page</b><br/>'+
+                '<a href="/index">index</a>');
   //next(); innecesario
 });
 
@@ -31,10 +32,14 @@ app.get('/index',function(request,response){
   });
 
 app.get('/random',function(request,response){
-  client.getRandomJoke()
+  let myClient = client.getRandomJoke();
+  myClient
     .then(function (joke) {
      //response.send(joke.value); //send, direct mode
-     response.render('random.ejs',{randomJoke:joke.value}); //rendering ejs
+     response.render('random.ejs',{
+       randomJoke:joke.value,
+       url:joke.iconUrl
+     }); //rendering ejs
    })
      .catch(function (err) {
          // handle error
@@ -44,8 +49,10 @@ app.get('/random',function(request,response){
 
 
   app.get('/categories', function(request,response) {
-    client.getJokeCategories()
+    let myJoke = client.getJokeCategories();
+    myJoke
       .then(function (rest) {
+        console.log(rest);
         response.render('categories',{categories:rest});
       }).catch(function (err) {
             response.send(`error`);// handle error
@@ -58,9 +65,7 @@ app.get('/random',function(request,response){
     const catChosen = req.params.catName;
     client.getRandomJoke(catChosen)
       .then(function (joke) {
-        res
-
-          .render('joke-by-category',{category:catChosen,joke:joke.value});
+        res.render('joke-by-category',{category:catChosen,joke:joke.value});
       }).catch(function (err) {
         // handle error
       });

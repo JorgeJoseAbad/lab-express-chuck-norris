@@ -3,10 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>Jokes by category</title>
-    <link rel="stylesheet"  href="css/style.css">
+    <link rel="stylesheet"  href="/css/style.css">
   </head>
   <body>
           <p><h1>CATEGORY</h1><%=category%></p>
-          <p><%=joke%></p>
+          <div class="joke">
+            <p><%=joke%></p>
+          </div>
+
+          <hr>
+          <a href="/index">volver</a>
   </body>
 </html>
