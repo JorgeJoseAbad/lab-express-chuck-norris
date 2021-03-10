@@ -8,14 +8,14 @@
   <body>
     <p><%=term%></p>
 
-    <%if (  items.length !== 0){%>
-      <p>Here are all the jokes with <%=term%> in it.</p>
+    <% if ( items.length !== 0){ %>
+      <h4>Here are all the jokes with <%=term%> in it.</h4>
       <% items.forEach(function (item){ %>
           <%- include('../joke', {joke: item.value}) %>
-      <% });%>
-    <% } else {%>
-      <p>Thers is no jokes with <%=term%> in it.</p>
-    <%}%>
+      <% }); %>
+    <% } else { %>
+      <h4>Thers is no jokes with word "<%=term%>" in it.</h4>
+    <% } %>
 
     <hr>
     <a href="/search">Return to search</a>
