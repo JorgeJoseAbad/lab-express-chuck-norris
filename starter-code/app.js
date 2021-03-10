@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const morgan     = require('morgan');
 const client = new Chuck();
 
+const PORT = 3000;
+
 app.use(express.static('public'));
 app.use(
   morgan(`Request Method: :method, Request URL: :url, Response Time: :response-time(ms)`));
@@ -41,6 +43,10 @@ app.get('/random',function(request,response){
      .catch(function (err) {
          //response.send(err);
          response.render('promiseerror',{
+           name :    err.name,
+           filename : err.fileName,
+           lineNumber : err.lineNumber,
+           columnNumber : err.columnNumber,
            message : err.message,
            stack   : err.stack
          });
@@ -57,6 +63,10 @@ app.get('/random',function(request,response){
       .catch(function (err) {
         //response.send(err);
         response.render('promiseerror',{
+          name :    err.name,
+          filename : err.fileName,
+          lineNumber : err.lineNumber,
+          columnNumber : err.columnNumber,
           message : err.message,
           stack   : err.stack
         });
@@ -77,6 +87,10 @@ app.get('/random',function(request,response){
       .catch(function (err) {
         //res.send(err);
         res.render('promiseerror',{
+          name :    err.name,
+          filename : err.fileName,
+          lineNumber : err.lineNumber,
+          columnNumber : err.columnNumber,
           message : err.message,
           stack   : err.stack
         })
@@ -101,6 +115,10 @@ app.get('/random',function(request,response){
       .catch(function (err) {
         //res.send(err.stack);
         res.render('promiseerror',{
+          name :    err.name,
+          filename : err.fileName,
+          lineNumber : err.lineNumber,
+          columnNumber : err.columnNumber,
           message : err.message,
           stack   : err.stack
         })
@@ -130,6 +148,6 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log('App chuck Norris port 3000!');
 });
