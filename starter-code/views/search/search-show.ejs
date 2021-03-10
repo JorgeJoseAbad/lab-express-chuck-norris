@@ -7,12 +7,16 @@
   </head>
   <body>
     <p><%=term%></p>
-    <p>Here are all the jokes with <%=term%> in it.</p>
-    <% items.forEach(function (item){ %>
-      <div class="joke">
-        <p><%=item.value%></p>
-      </div>
-    <% });%>
+
+    <%if (  items.length !== 0){%>
+      <p>Here are all the jokes with <%=term%> in it.</p>
+      <% items.forEach(function (item){ %>
+          <%- include('../joke', {joke: item.value}) %>
+      <% });%>
+    <% } else {%>
+      <p>Thers is no jokes with <%=term%> in it.</p>
+    <%}%>
+
     <hr>
     <a href="/search">Return to search</a>
   </body>

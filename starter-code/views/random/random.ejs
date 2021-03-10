@@ -8,9 +8,7 @@
   <body>
           <h4>Joke with Our Hero</h4>
           <img src="<%=url%>" alt="chucknorris">
-          <div class="joke">
-            <p><%=randomJoke%></p>
-          </div>
+            <%- include('../joke', {joke: randomJoke}) %>
           <a href="">Another joke</a>
           <br/>
           <a href="/index">Return to index</a>
