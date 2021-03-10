@@ -36,11 +36,11 @@ app.get('/random',function(request,response){
   myClient
     .then(function (joke) {
      //response.send(joke.value); //send, direct mode
-     response.render('random.ejs',{
-       randomJoke:joke.value,
-       url:joke.iconUrl
-     }); //rendering ejs
-   })
+       response.render('./random/random.ejs',{
+         randomJoke:joke.value,
+         url:joke.iconUrl
+       }); //rendering ejs
+     })
      .catch(function (err) {
          // handle error
          response.send(`error`);
@@ -53,8 +53,9 @@ app.get('/random',function(request,response){
     myJoke
       .then(function (rest) {
         console.log(rest);
-        response.render('categories',{categories:rest});
-      }).catch(function (err) {
+        response.render('./categories/categories',{categories:rest});
+      })
+      .catch(function (err) {
             response.send(`error`);// handle error
       });
 
@@ -65,89 +66,35 @@ app.get('/random',function(request,response){
     const catChosen = req.params.catName;
     client.getRandomJoke(catChosen)
       .then(function (joke) {
-        res.render('joke-by-category',{category:catChosen,joke:joke.value});
-      }).catch(function (err) {
-        // handle error
+        res.render('./categories/joke-by-category',{category:catChosen,joke:joke.value});
+      })
+      .catch(function (err) {
+        res.send(err);
       });
 
   });
 
   app.get('/search',function(req,res){
-    res.render('search-form');
+    res.render('./search/search-form');
   });
 
   app.post('/search',function(req,res){
     //res.send('hola');
-    const searchTerm=req.body.keyboard;
-    client.search(searchTerm).then(function (response) {
-        let rsearch=response.items;
-        res.render('search-show',{term:searchTerm,items:rsearch});
-    }).catch(function (err) {
-        // handle error
-    });
+    const searchTerm = req.body.keyboard;
+    client.search(searchTerm)
+      .then(function (response) {
+        let rsearch = response.items;
+        res.render('./search/search-show',{
+          term:searchTerm,
+          items:rsearch
+        });
+      })
+      .catch(function (err) {
+        res.send(err);
+      });
   });
 
-// Retrieve a random chuck joke
-/*client.getRandomJoke().then(function (response) {
-
-  app.get('/random',function(request,response){
-    response
-      .render(`index.ejs`, {
-      foo: myJoke
-    });
-
-}).catch(function (err) {
-    // handle error
-});
-}
-
-*/
-
-/*
-app.post('/login',function(request,response){
-const name= request.body.name // equivalente a const {name}=request.body
-const password = request.body.password
-response.send(`wellcome ${name}`)
-});
-
-*/
 
 app.listen(3000, () => {
   console.log('App chuck Norris port 3000!');
 });
-
-
-/*
-```javascript
-const Chuck  = require('chucknorris-io'),
-      client = new Chuck();
-
-// Retrieve a random chuck joke
-client.getRandomJoke().then(function (response) {
-    // to stuff here
-}).catch(function (err) {
-    // handle error
-});
-
-// Retrieve a random chuck joke from the given category
-client.getRandomJoke('dev').then(function (response) {
-    // to stuff here
-}).catch(function (err) {
-    // handle error
-});
-
-// Retrieve a list of available joke categories
-client.getJokeCategories().then(function (response) {
-    // to stuff here
-}).catch(function (err) {
-    // handle error
-});
-
-// Free text search
-client.search(searchTerm).then(function (response) {
-    // to stuff here
-}).catch(function (err) {
-    // handle error
-});
-```
-*/
