@@ -39,7 +39,11 @@ app.get('/random',function(request,response){
        });
      })
      .catch(function (err) {
-         response.send(err);
+         //response.send(err);
+         response.render('promiseerror',{
+           message : err.message,
+           stack   : err.stack
+         });
      });
 });
 
@@ -51,7 +55,11 @@ app.get('/random',function(request,response){
         response.render('./categories/categories',{categories:rest});
       })
       .catch(function (err) {
-        response.send(err);
+        //response.send(err);
+        response.render('promiseerror',{
+          message : err.message,
+          stack   : err.stack
+        });
       });
 
   });
@@ -67,7 +75,11 @@ app.get('/random',function(request,response){
         });
       })
       .catch(function (err) {
-        res.send(err);
+        //res.send(err);
+        res.render('promiseerror',{
+          message : err.message,
+          stack   : err.stack
+        })
       });
 
   });
@@ -77,7 +89,7 @@ app.get('/random',function(request,response){
   });
 
   app.post('/search',function(req,res){
-    const searchTerm = req.body.keyboard;
+    const searchTerm = req.body.keyboard;//error inducido
     client.search(searchTerm)
       .then(function (response) {
         let rsearch = response.items;
@@ -87,9 +99,35 @@ app.get('/random',function(request,response){
         });
       })
       .catch(function (err) {
-        res.send(err);
+        //res.send(err.stack);
+        res.render('promiseerror',{
+          message : err.message,
+          stack   : err.stack
+        })
+
       });
   });
+
+// catch 404 and forward to error handler if no route is found
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  //err.status testing
+  err.status = 500;
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
 
 
 app.listen(3000, () => {
